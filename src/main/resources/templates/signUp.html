@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/" th:replace=~{base::layout(~{::section})}>
+<head>
+    <meta charset="UTF-8">
+    <title>SignUp</title>
+</head>
+<body class="bg-dark">
+
+<section>
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-lg-4 m-auto">
+    <form class="row g-3">
+
+<!--        UserType-->
+
+        <div class="col-md-6">
+            <label for="userType" class="form-label">SignUp As</label>
+            <select id="userType" class="form-select">
+                <option selected>User</option>
+                <option>Contractor</option>
+                <option>Builder</option>
+            </select>
+        </div>
+
+<!--        Name-->
+
+        <div class="col-12">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" placeholder="as per adhar card">
+        </div>
+
+<!--        Mobile  &  Email -->
+
+
+            <div class="col-12">
+                <label for="mob" class="form-label">Mobile No</label>
+                <input type="text" class="form-control" id="mob" placeholder="Mobile Number">
+            </div>
+
+
+        <div class="col-12">
+            <label for="email" class="form-label">Email</label>
+            <input type="text" class="form-control" id="email" placeholder="Email">
+        </div>
+
+
+<!--Address1 & Address2-->
+
+
+        <div class="col-12">
+            <label for="inputAddress" class="form-label">Address</label>
+            <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+        </div>
+
+        <div class="col-12">
+            <label for="inputAddress2" class="form-label">Address 2</label>
+            <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+        </div>
+
+<!--        Adhar  & Pan card Documents -->
+        <div class="col-12">
+            <label for="adharDoc" class="form-label">Adhar Card</label>
+            <input class="form-control form-control-sm" id="adharDoc" type="file">
+        </div>
+
+        <div class="col-12">
+            <label for="panDoc" class="form-label">Pan Card</label>
+            <input class="form-control form-control-sm" id="panDoc" type="file">
+        </div>
+
+
+        <div class="col-md-6">
+            <label for="inputPassword4" class="form-label">Password</label>
+            <input type="password" class="form-control" id="inputPassword4">
+        </div>
+
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Sign Up</button>
+        </div>
+
+    </form>
+            </div>
+    </div>
+    </div>
+</section>
+</body>
+</html>
