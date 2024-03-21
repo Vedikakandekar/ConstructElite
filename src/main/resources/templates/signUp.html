@@ -1,88 +1,99 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org/" th:replace=~{base::layout(~{::section})}>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace=~{base::layout(~{::section})}>
 <head>
-    <meta charset="UTF-8">
-    <title>SignUp</title>
+<meta charset="UTF-8">
+<title>SignUp</title>
 </head>
 <body class="bg-dark">
 
-<section>
-    <div class="container">
-        <div class="row mt-5">
-            <div class="col-lg-4 m-auto">
-    <form class="row g-3">
+	<section>
+		<div class="container">
+			<div class="row mt-5">
+				<div class="col-lg-4 m-auto">
 
-<!--        UserType-->
+					<div th:if="${session.message}" th:classappend="${session.message.getType()}" class="alert alert-primary" role="alert">
+						<p class="text-center" th:text="${session.message.getContent()}"> </p>
+						<th:block th:text="${@sessionHelper.removeMessageFromSession()}"></th:block>
+						</div>̥
+					<form class="row g-3" th:action="@{/registerUser}" method="POST"
+						th:object="${user}">
 
-        <div class="col-md-6">
-            <label for="userType" class="form-label">SignUp As</label>
-            <select id="userType" class="form-select">
-                <option selected>User</option>
-                <option>Contractor</option>
-                <option>Builder</option>
-            </select>
-        </div>
+						<!--        UserType-->
 
-<!--        Name-->
+						<div class="col-md-6">
+							<label for="userType" class="form-label">SignUp As</label> <select
+								id="userType" class="form-select" th:value="${user.getUserRole()}"
+								name="userRole">
+								<option th:value="client">Client</option>
+								<option th:value="contractor">Contractor</option>
+								<option th:value="builder">Builder</option>
+							</select>
+						</div>
 
-        <div class="col-12">
-            <label for="name" class="form-label">Name</label>
-            <input type="text" class="form-control" id="name" placeholder="as per adhar card">
-        </div>
+						<!--        Name-->
 
-<!--        Mobile  &  Email -->
+						<div class="col-12">
+							<label for="name" class="form-label">Name</label> <input required
+								type="text" name="userName" class="form-control" id="name"
+								placeholder="as per adhar card" th:value="${user.getUserName()}">
+						</div>
 
-
-            <div class="col-12">
-                <label for="mob" class="form-label">Mobile No</label>
-                <input type="text" class="form-control" id="mob" placeholder="Mobile Number">
-            </div>
-
-
-        <div class="col-12">
-            <label for="email" class="form-label">Email</label>
-            <input type="text" class="form-control" id="email" placeholder="Email">
-        </div>
+						<!--        Mobile  &  Email -->
 
 
-<!--Address1 & Address2-->
+						<div class="col-12">
+							<label for="mob" class="form-label">Mobile No</label> <input
+								required type="text" class="form-control" id="mob"
+								name="userPhone" placeholder="Mobile Number"
+								th:value="${user.getUserPhone()}">
+						</div>
 
 
-        <div class="col-12">
-            <label for="inputAddress" class="form-label">Address</label>
-            <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
-        </div>
-
-        <div class="col-12">
-            <label for="inputAddress2" class="form-label">Address 2</label>
-            <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
-        </div>
-
-<!--        Adhar  & Pan card Documents -->
-        <div class="col-12">
-            <label for="adharDoc" class="form-label">Adhar Card</label>
-            <input class="form-control form-control-sm" id="adharDoc" type="file">
-        </div>
-
-        <div class="col-12">
-            <label for="panDoc" class="form-label">Pan Card</label>
-            <input class="form-control form-control-sm" id="panDoc" type="file">
-        </div>
+						<div class="col-12">
+							<label for="email" class="form-label">Email</label> <input
+								required type="text" class="form-control" id="email"
+								name="userEmail" placeholder="Email"
+								th:value="${user.getUserEmail()}">
+						</div>
 
 
-        <div class="col-md-6">
-            <label for="inputPassword4" class="form-label">Password</label>
-            <input type="password" class="form-control" id="inputPassword4">
-        </div>
+						<!--Address1 & Address2-->
 
-        <div class="col-12">
-            <button type="submit" class="btn btn-primary">Sign Up</button>
-        </div>
 
-    </form>
-            </div>
-    </div>
-    </div>
-</section>
+						<div class="col-12">
+							<label for="addr" class="form-label">Address</label> <input
+								type="text" required class="form-control" id="addr"
+								name="userAddress" placeholder="1234 Main St"
+								th:value="${user.getUserAddress()}">
+						</div>
+
+						<!--        Adhar  & Pan card Documents -->
+						<div class="col-12">
+							<label for="adharDoc" class="form-label">Adhar Card</label> <input
+								class="form-control form-control-sm" id="adharDoc" type="file">
+						</div>
+
+						<div class="col-12">
+							<label for="panDoc" class="form-label">Pan Card</label> <input
+								class="form-control form-control-sm" id="panDoc" type="file">
+						</div>
+
+
+						<div class="col-md-6">
+							<label for="password" class="form-label">Password</label> <input
+								type="password" class="form-control" id="password"
+								name="userPassword">
+						</div>
+
+						<div class="col-12">
+							<button type="submit" class="btn btn-primary">Sign Up</button>
+						</div>
+
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
 </body>
 </html>
