@@ -12,13 +12,4 @@ public class ConstructEliteApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ConstructEliteApplication.class, args);
 	}
-//	@Configuration
-//	public class WebConfig implements WebMvcConfigurer {
-//		@Override
-//		public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//			registry.addResourceHandler("/**")
-//					.addResourceLocations("classpath:/static/img","classpath:/image/")
-//					.setCachePeriod(0);
-//		}
-//	}
 }

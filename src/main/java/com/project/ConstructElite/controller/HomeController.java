@@ -39,17 +39,7 @@ public class HomeController {
         return "signUp";
     }
     
-    
-    
-//    Login Page Mapping
-    @RequestMapping("/login")
-    public String login(Model model)
-    {
-        model.addAttribute("title","Login");
-        return "login";
-    }
-    
-    
+      
     
 //   Registering New User
     @PostMapping("/registerUser")
@@ -70,7 +60,7 @@ public class HomeController {
     	model.addAttribute("user", new User());
     	session.setAttribute("message", new UserMessage("User Registered Successfully", "alert-success"));
     	
-    	return "signUp";
+    	return "login";
     	
     	}
     	catch (Exception e) {
@@ -80,4 +70,9 @@ public class HomeController {
 		}
     	
     }
+    
+    
+    
+    
+    
 }
