@@ -1,0 +1,99 @@
+
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
+      th:replace=(~{base::layout(~{::section})})>
+<head>
+    <meta charset="UTF-8">
+    <title>SignUp</title>
+</head>
+<body class="bg-dark">
+
+<section>
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-lg-4 m-auto">
+
+                <div th:if="${session.message}" th:classappend="${session.message.getType()}" class="alert alert-primary" role="alert">
+                    <p class="text-center" th:text="${session.message.getContent()}"> </p>
+                    <th:block th:text="${@sessionHelper.removeMessageFromSession()}"></th:block>
+                </div>̥
+                <form class="row g-3" th:action="@{/registerUser}" method="POST"
+                      th:object="${user}">
+
+                    <!--        UserType-->
+
+                    <div class="col-md-6">
+                        <label for="userType" class="form-label">SignUp As</label> <select
+                            id="userType" class="form-select" th:value="${user.getRole()}"
+                            name="role">
+                        <option th:value="ROLE_CLIENT">CLIENT</option>
+                        <option th:value="ROLE_CONTRACTOR">CONTRACTOR</option>
+                        <!--								<option th:value="Role_builder">Builder</option>-->
+                    </select>
+                    </div>
+
+                    <!-- Name-->
+
+                    <div class="col-12">
+                        <label for="name" class="form-label">Name</label> <input required
+                                                                                 type="text" name="name" class="form-control" id="name"
+                                                                                 placeholder="as per adhar card" th:value="${user.getName()}">
+                    </div>
+
+                    <!--        Mobile  &  Email -->
+
+
+                    <div class="col-12">
+                        <label for="mob" class="form-label">Mobile No</label> <input
+                            required type="text" class="form-control" id="mob"
+                            name="phone" placeholder="Mobile Number"
+                            th:value="${user.getPhone()}">
+                    </div>
+
+
+                    <div class="col-12">
+                        <label for="email" class="form-label">Email</label> <input
+                            required type="text" class="form-control" id="email"
+                            name="email" placeholder="Email"
+                            th:value="${user.getEmail()}">
+                    </div>
+
+
+                    <!--Address1 & Address2-->
+
+
+                    <div class="col-12">
+                        <label for="addr" class="form-label">Address</label> <input
+                            type="text" required class="form-control" id="addr"
+                            name="address" placeholder="1234 Main St"
+                            th:value="${user.getAddress()}">
+                    </div>
+
+                    <!--        Adhar  & Pan card Documents -->
+                    <div class="col-12">
+                        <label for="adharDoc" class="form-label">Adhar Card</label> <input
+                            class="form-control form-control-sm" id="adharDoc" type="file">
+                    </div>
+
+                    <div class="col-12">
+                        <label for="panDoc" class="form-label">Pan Card</label> <input
+                            class="form-control form-control-sm" id="panDoc" type="file">
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <label for="password" class="form-label">Password</label> <input
+                            type="password" class="form-control" id="password"
+                            name="password">
+                    </div>
+
+                    <div class="col-12">
+                        <input class="btn btn-primary" type="submit" value="Submit">
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
