@@ -62,4 +62,9 @@ public class CustomUserDetails implements UserDetails{
         return true;
     }
 
+    public User getUser()
+    {
+        return user;
+    }
+
 }

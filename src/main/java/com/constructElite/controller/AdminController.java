@@ -2,14 +2,20 @@ package com.constructElite.controller;
 
 import com.constructElite.Entity.User;
 import com.constructElite.Services.UserService;
+import com.constructElite.config.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("admin/")
@@ -20,6 +26,8 @@ public class AdminController {
 
     @GetMapping("/adminDashboard")
     public String baseDash(Model model) {
+        CustomUserDetails loggedInUser = userService.getCurrentlyLoggedInUser();
+        model.addAttribute("user",loggedInUser.getUser());
         model.addAttribute("title", "Dashboard");
         return "admin/adminDashboard";
     }
@@ -69,6 +77,46 @@ public class AdminController {
         m.addObject("title","All Clients");
         return m;
     }
+
+    @GetMapping("/approve-sp/{userId}")
+    public String approveSpId(@PathVariable("userId") int userId)
+    {
+        Optional<User> u = userService.getUserById(userId);
+        if(u.isPresent())
+        {
+            User user = u.get();
+            user.setIsApproved(true);
+            userService.saveNewUserToDb(user);
+            return "admin/adminDashboard";
+        }
+        else
+            return "/error";
+    }
+
+    @GetMapping("/disapprove-sp/{userId}")
+    public String disapproveSpId(@PathVariable("userId") int userId)
+    {
+        Optional<User> u = userService.getUserById(userId);
+        if(u.isPresent())
+        {
+            User user = u.get();
+            user.setIsApproved(false);
+            userService.saveNewUserToDb(user);
+            return "admin/adminDashboard";
+        }
+        else
+            return "/error";
+    }
+
+
+//    @GetMapping("/getLoggedInUser")
+//    public String getLoggedInUser()
+//    {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+//            User user = (User)authentication.getDetails();
+//        }
+//    }
 
 
 

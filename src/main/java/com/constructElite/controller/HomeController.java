@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class HomeController {
     @Autowired
-    private  UserService userService;
+    private final UserService userService;
 
     @Autowired
     private final PasswordEncoder passwordEncoder;

@@ -37,14 +37,96 @@
 
                 <!--               Admin Profile-->
                 <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="dropdownUser2" style="">
-                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li>
+                        <!--                        <a class="dropdown-item"-->
+                        <!--                           data-bs-toggle="modal"-->
+                        <!--                           data-bs-target="#profile"-->
+                        <!--                           role="button" >Profile</a>-->
+
+                        <a class="dropdown-item"
+                           data-bs-toggle="modal"
+                           data-bs-target="#profile"
+                           role="button"
+                        >Profile</a>
+
+
+                    </li>
+
+
                     <li>
                         <hr class="dropdown-divider">
                     </li>
                     <li><a class="dropdown-item" th:href="@{/logout}">Sign out</a></li>
                 </ul>
 
+                <!--                Profile-->
+                <div class="modal fade" id="profile" data-bs-backdrop="static" data-bs-keyboard="false"
+                     tabindex="-1" aria-labelledby="staticBackdropLabel1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="staticBackdropLabel1">Profile </h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3 row">
 
+
+                                    <label for="uid" class="col-sm-2 col-form-label">User Id</label>
+                                    <div class="col-sm-10">
+                                        <blockquote class="blockquote">
+                                        <input type="text" readonly class="form-control-plaintext" id="uid" th:value="${user.UserId}">
+                                        </blockquote>
+                                    </div>
+
+                                    <label for="email" class="col-sm-2 col-form-label">Email </label>
+                                    <div class="col-sm-10">
+                                        <blockquote class="blockquote">
+                                        <input type="text" readonly class="form-control-plaintext" id="email" th:value="${user.email}">
+                                        </blockquote>
+                                    </div>
+
+
+                                    <label for="name" class="col-sm-2 col-form-label">Name </label>
+                                    <div class="col-sm-10">
+                                        <blockquote class="blockquote">
+                                        <input type="text" readonly class="form-control-plaintext" id="name" th:value="${user.name}">
+                                        </blockquote>
+                                    </div>
+
+
+                                    <label for="addr" class="col-sm-2 col-form-label">Address</label>
+                                    <div class="col-sm-10">
+                                        <blockquote class="blockquote">
+                                        <input type="text" readonly class="form-control-plaintext" id="addr" th:value="${user.address}">
+                                        </blockquote>
+                                    </div>
+
+                                    <label for="phone" class="col-sm-2 col-form-label">Mobile</label>
+                                    <div class="col-sm-10">
+                                        <blockquote class="blockquote">
+                                        <input type="text" readonly class="form-control-plaintext" id="phone" th:value="${user.phone}">
+
+                                        </blockquote></div>
+
+                                    <label for="role" class="col-sm-2 col-form-label">Role</label>
+                                    <div class="col-sm-10">
+                                        <blockquote class="blockquote">
+                                        <input type="text" readonly class="form-control-plaintext" id="role" th:value="${user.role}">
+                                        </blockquote></div>
+
+
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
