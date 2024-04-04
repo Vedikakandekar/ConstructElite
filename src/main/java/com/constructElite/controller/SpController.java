@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("sp/")
 public class SpController {
 
-    @GetMapping("spDashboard")
+    @GetMapping("/spDashboard")
     public String baseDash(Model model) {
         model.addAttribute("title", "Dashboard");
         return "sp/spDashboard";

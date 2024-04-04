@@ -4,6 +4,7 @@ package com.constructElite.repository;
 import com.constructElite.Entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,6 +16,12 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     User findByEmail(String email);
 
+    @Query("SELECT u FROM User u WHERE (u.name LIKE %:searchTerm% OR u.address LIKE %:searchTerm% OR u.email LIKE %:searchTerm%) AND u.role = 'ROLE_CONTRACTOR'")
+    List<User> searchSPUsers(@Param("searchTerm") String searchTerm);
+
+
+    @Query("SELECT u FROM User u WHERE u.name LIKE %:searchTerm% OR u.address LIKE %:searchTerm% OR u.email LIKE %:searchTerm%")
+    List<User> searchAllUsers(@Param("searchTerm") String searchTerm);
     @Query("SELECT u FROM User u WHERE u.isApproved IS NULL")
     List<User> findByIsApprovedNull();
 

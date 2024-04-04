@@ -3,6 +3,7 @@ package com.constructElite.Services;
 import com.constructElite.Entity.User;
 import com.constructElite.config.CustomUserDetails;
 import com.constructElite.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,15 +19,23 @@ public class UserService {
     @Autowired
     UserRepository userRepo;
 
+
     public Optional<User> getUserById(int id) {
         return userRepo.findById(id);
     }
 
-
-    public CustomUserDetails getCurrentlyLoggedInUser()
+    public List<User> searchAllUsers(String searchTerm)
     {
-        return (CustomUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userRepo.searchAllUsers(searchTerm);
+    }
 
+    public List<User> searchSPUsers(String searchTerm) {
+        return userRepo.searchSPUsers(searchTerm);
+    }
+
+    public User getCurrentLoggedInUser() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return findByEmail(email);
     }
 
     public User findByEmail(String email) {

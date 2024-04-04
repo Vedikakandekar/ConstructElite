@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" th:replace=~{client/baseClient::layout(~{::section})}>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" th:replace=~{client/baseClient::layout(~{::main})}>
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -9,15 +9,35 @@
 </head>
 <body>
 
-<section>
-    <main class="col overflow-auto h-100">
+
+    <main class="container-fluid h-100">
         <div class="bg-light border rounded-3 p-3">
-            <h2>Client Dashboard</h2>
-            <p>Sriracha's biodiesel taxidermy organic post-ironic, Intelligentsia salvia mustache 90's code editing brunch. Butcher polaroid VHS art party, hashtag Brooklyn deep v PBR narwhal sustainable mixtape swag wolf squid tote bag. Tote bag cronut semiotics, raw denim deep v taxidermy messenger bag. Tofu YOLO Etsy, direct trade ethical Odd Future jean shorts paleo. Forage Shoreditch tousled aesthetic irony, street art organic Bushwick artisan cliche semiotics ugh synth chillwave meditation. Shabby chic lomo plaid vinyl chambray Vice. Vice sustainable cardigan, Williamsburg master cleanse hella DIY 90's blog.</p>
-            <p>Ethical Kickstarter PBR asymmetrical lo-fi. Dreamcatcher street art Carles, stumptown gluten-free Kickstarter artisan Wes Anderson wolf pug. Godard sustainable you probably haven't heard of them, vegan farm-to-table Williamsburg slow-carb readymade disrupt deep v. Meggings seitan Wes Anderson semiotics, cliche American Apparel whatever. Helvetica cray plaid, vegan brunch Banksy leggings +1 direct trade. Wayfarers codeply PBR selfies. Banh mi McSweeney's Shoreditch selfies, forage fingerstache food truck occupy YOLO Pitchfork fixie iPhone fanny pack art party Portland.</p>
-        </div>
-    </main>
-</section>
+            <h2 th:text="${title}">Service Providers</h2>
+
+            <table class="table  table-striped table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Email</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Mobile No</th>
+                    <th scope="col">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user:${userList}">
+                    <td th:text="${user != null ? user.email : ''}"></td>
+                    <td th:text="${user != null ? user.name : ''}"></td>
+                    <td th:text="${user != null ? user.address : ''}"></td>
+                    <td th:text="${user != null ? user.phone : ''}"></td>
+                    <td th:if="${user != null }">
+                        <a class="btn btn-outline-info btn-sm"
+                           role="button">View Profile</a>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+</main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
