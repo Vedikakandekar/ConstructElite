@@ -20,6 +20,10 @@ public class UserService {
     UserRepository userRepo;
 
 
+    public User getUserByUserId(int id)
+    {
+        return userRepo.findByUserId(id);
+    }
     public Optional<User> getUserById(int id) {
         return userRepo.findById(id);
     }
@@ -33,6 +37,10 @@ public class UserService {
         return userRepo.searchSPUsers(searchTerm);
     }
 
+    public List<User> getAllSp()
+    {
+        return userRepo.findByIsApproved();
+    }
     public User getCurrentLoggedInUser() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         return findByEmail(email);

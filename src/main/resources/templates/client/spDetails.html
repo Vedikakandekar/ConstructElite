@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" th:replace=~{client/baseClient::layout(~{::main})}>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" th:replace=~{client/baseClient::layout(~{::div})}>
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -10,66 +10,64 @@
 </head>
 <body>
 
-<main class="container-fluid h-100">
+<div class="container-fluid h-100">
     <div class="bg-light border rounded-3 p-3">
-        <h2 th:text="${title}"></h2>
-        <table class="table  table-striped table-hover">
-            <thead>
-            <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Location</th>
-                <th scope="col">Land Size</th>
-                <th scope="col">Budget</th>
-                <th scope="col">TimeLine</th>
-                <th scope="col">Other Details</th>
+        <h2 th:text="${sp.name}"></h2>
+        <a class="btn btn-outline-warning btn-sm" data-bs-toggle="modal" data-bs-target="#quotation" role="button">Ask
+            Quotation</a>
+        <div class="alert alert-danger" role="alert" th:text="${errorMessageQuot}" th:if="${errorMessageQuot != null}"></div>
 
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="project:${projectList}">
-                <td th:text="${project.name}"></td>
-                <td th:text="${project.location}"></td>
-                <td th:text="${project.landSize}"></td>
-                <td th:text="${project.budget}"></td>
-                <td th:text="${project.timeline}"></td>
-                <td>
-                    <a class="btn btn-outline-info btn-sm"
-                       data-bs-toggle="modal"
-                       data-bs-target="#viewDetails"
-                       role="button">View Details</a>
 
-                    <!--            Block-Client modal-->
+        <div class="modal fade" id="quotation" data-bs-backdrop="static" data-bs-keyboard="false"
+             tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Ask Quotation</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
 
-                    <div class="modal fade" id="viewDetails" data-bs-backdrop="static" data-bs-keyboard="false"
-                         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Block Client ?</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
+                    <div class="modal-body">
+                        <div class="mb-3 row">
+
+                            <p class="h5">Select Project to get Quotation</p>
+                            <form id="quotationForm" th:action="@{/client/askQuotation/{sp_id}(sp_id=${sp.UserId})}" method="post">
+                                <input type="hidden" name="name" th:value="Quotation" readonly class="form-control-plaintext"/>
+
+                                <input name="documentName" type="hidden" th:value="QuotationDocument"/>
+
+                                <input type="hidden" name="status">
+
+                                <input type="hidden" name="byClientId" th:value="${CurrentUser.UserId}"/>
+                                <input type="hidden" name="toSpId" th:value="${sp.UserId}"/>
+                                <div class="form-group mb-5" >
+                                    <label class="control-label col-sm-offset-2 col-sm-2 mb-3"
+                                           for="project_id">Projects</label><br>
+                                    <div class="col-sm-6 col-md-4">
+                                        <select id="project_id" class="form-control mb-2" name="projectId">
+                                            <option value="">Select a Project</option>
+                                            <option class="mb-2" th:each="project : ${projectList}" th:value="${project.projectId}"
+                                                    th:text="${project.name}">Small
+                                            </option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="modal-body" th:utext="${project.projectDescription}">
 
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
-                                    </button>
-                                    <button href="#" type="button" class="btn btn-primary">Block Client</button>
-                                </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
-                </td>
-
-            </tr>
-
-            </tbody>
-
-        </table>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" form="quotationForm">Ask Quotation</button>
+                        <!--                                    <button href="#" type="button" class="btn btn-primary">Block Client</button>-->
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
-</main>
+</div>
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

@@ -42,8 +42,11 @@ public class AdminController {
 
     @GetMapping("/adminDashboard")
     public ModelAndView baseDash(Model model) {
-        ModelAndView m =setupAdminDashboardModel();
-        m.addObject("title", "Dashboard");
+        List<User> list = userService.getNewSP();
+        ModelAndView m=setupAdminDashboardModel();
+
+        m.addObject("userList",list);
+        m.addObject("title","New Service Providers");
         return m;
     }
 
@@ -100,7 +103,12 @@ public class AdminController {
             User user = u.get();
             user.setIsApproved(true);
             userService.saveNewUserToDb(user);
-            return setupAdminDashboardModel();
+            ModelAndView m= setupAdminDashboardModel();
+            List<User> list = userService.getApprovedSP();
+            m.addObject("userList",list);
+            m.addObject("clients",false);
+            m.addObject("title","Approved Service Providers");
+            return m;
         }
         else
             return new ModelAndView("/error");
@@ -115,7 +123,11 @@ public class AdminController {
             User user = u.get();
             user.setIsApproved(false);
             userService.saveNewUserToDb(user);
-            return setupAdminDashboardModel();
+            List<User> list = userService.getDisapprovedSP();
+            ModelAndView m=setupAdminDashboardModel();
+            m.addObject("userList",list);
+            m.addObject("title","Disapproved Service Providers");
+            return m;
         }
         else
             return new ModelAndView("/error");

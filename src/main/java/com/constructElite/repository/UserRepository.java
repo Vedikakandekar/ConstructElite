@@ -16,9 +16,14 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     User findByEmail(String email);
 
+    @Query("SELECT u FROM User u WHERE u.UserId=?1")
+    User findByUserId(int id);
+
     @Query("SELECT u FROM User u WHERE (u.name LIKE %:searchTerm% OR u.address LIKE %:searchTerm% OR u.email LIKE %:searchTerm%) AND u.role = 'ROLE_CONTRACTOR'")
     List<User> searchSPUsers(@Param("searchTerm") String searchTerm);
 
+    @Query("SELECT u FROM User u WHERE u.role='ROLE_CONTRACTOR'")
+    List<User> findAllSp();
 
     @Query("SELECT u FROM User u WHERE u.name LIKE %:searchTerm% OR u.address LIKE %:searchTerm% OR u.email LIKE %:searchTerm%")
     List<User> searchAllUsers(@Param("searchTerm") String searchTerm);

@@ -7,62 +7,98 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-<!--    <link rel="stylesheet" type="text/css" th:href="@{css/baseDashCss.css}">-->
+    <!--    <link rel="stylesheet" type="text/css" th:href="@{css/baseDashCss.css}">-->
 </head>
 <body>
 
-<main class="col overflow-auto h-100 -100">
-    <h2 th:text="${title}">Client Dashboard</h2>
+<main class="container-fluid h-100">
+    <div class="bg-light border rounded-3">
+        <h2 class="text-center mt-4" th:text="${title}">Client Dashboard</h2>
 
-    <div th:if="${session.message}" th:classappend="${session.message.getType()}" class="alert alert-primary" role="alert">
-        <p class="text-center" th:text="${session.message.getContent()}"> </p>
-        <th:block th:text="${@sessionHelper.removeMessageFromSession()}"></th:block>
-    </div>̥
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-md-8 offset-md-2">
 
-    <form th:action="@{project/add-new-project}" method="post" th:object="${project}">
+                    <div th:if="${session.message}" th:classappend="${session.message.getType()}"
+                         class="alert alert-primary" role="alert">
+                        <p class="text-center" th:text="${session.message.getContent()}"></p>
+                        <th:block th:text="${@sessionHelper.removeMessageFromSession()}"></th:block>
+                    </div>
 
-        <div class="form-group">
-            <label for="name">Project Name:</label>
-            <input type="text" class="form-control" id="name"
-                   th:value="${project != null ? project.getName() : '' }" name="name" required>
+                    <form novalidate th:action="@{/client/add-new-project}" method="post" th:object="${project}">
+
+                        <div class="form-group mb-3">
+                            <label for="name">Project Name:</label>
+                            <input type="text" class="form-control "
+                                   th:classappend="${#fields.hasErrors('name') ? 'is-invalid' : ''}" id="name"
+                                   th:value="${project != null ? project.getName() : '' }" name="name"
+                                   placeholder="Name should be unique" required>
+                            <div class="invalid-feedback" th:each="e:${#fields.errors('name')}" th:text="${e}">
+                            </div>
+
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="location">Location:</label>
+                            <input type="text" class="form-control "
+                                   th:classappend="${#fields.hasErrors('location') ? 'is-invalid' : ''}" id="location"
+                                   th:value="${project != null ? project.getLocation() : '' }" name="location"
+                                   placeholder="Construction Location" required>
+                            <div class="invalid-feedback" th:each="e:${#fields.errors('location')}" th:text="${e}">
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="landSize">Land Size:</label>
+                            <input type="text" class="form-control "
+                                   th:classappend="${#fields.hasErrors('landSize') ? 'is-invalid' : ''}" id="landSize"
+                                   th:value="${project != null ? project.getLandSize() : '' }" name="landSize"
+                                   placeholder="Enter approximate" required>
+                            <div class="invalid-feedback" th:each="e:${#fields.errors('landSize')}" th:text="${e}">
+                            </div>
+                        </div>
+
+
+                        <div class="form-group mb-3">
+                            <label for="budget">Budget:</label>
+                            <input type="text" class="form-control "
+                                   th:classappend="${#fields.hasErrors('budget') ? 'is-invalid' : ''}" id="budget"
+                                   th:value="${project != null ? project.getBudget() : ''}"
+                                   placeholder="Enter Expected Budget" name="budget">
+                            <div class="invalid-feedback" th:each="e:${#fields.errors('budget')}" th:text="${e}">
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="timeline">Timeline:</label>
+                            <input type="text" class="form-control "
+                                   th:classappend="${#fields.hasErrors('timeline') ? 'is-invalid' : ''}" id="timeline"
+                                   th:value="${project != null ? project.getTimeline() : ''}"
+                                   placeholder="Enter Expected timeline" name="timeline">
+                            <div class="invalid-feedback" th:each="e:${#fields.errors('timeline')}" th:text="${e}">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="mytextarea">Other Details :</label>
+                            <textarea name="projectDescription" id="mytextarea" class="form-control "
+                                      th:classappend="${#fields.hasErrors('projectDescription') ? 'is-invalid' : ''}"
+                                      th:value="${project != null ? project.getProjectDescription() : ''}"
+                                      placeholder="Explain your expectations and Project in detail with every information so that SP can give Quotation"></textarea>
+                            <div class="invalid-feedback" th:each="e:${#fields.errors('projectDescription')}"
+                                 th:text="${e}">
+                            </div>
+                        </div>
+
+
+                        <button type="submit" class="btn btn-warning mb-3">Create Project</button>
+
+                    </form>
+
+                </div>
+            </div>
         </div>
-
-        <div class="form-group">
-            <label for="location">Location:</label>
-            <input type="text" class="form-control" id="location"
-                   th:value="${project != null ? project.getLocation() : '' }" name="location" required>
-        </div>
-
-        <div class="form-group">
-            <label for="landSize">Land Size:</label>
-            <input type="text" class="form-control" id="landSize"
-                   th:value="${project != null ? project.getLandSize() : '' }" name="landSize" required>
-        </div>
-
-
-        <div class="form-group">
-            <label for="budget">Budget:</label>
-            <input type="text" class="form-control" id="budget"
-                  th:value="${project != null ? project.getBudget() : ''}" name="budget">
-        </div>
-
-        <div class="form-group">
-            <label for="timeline">Timeline:</label>
-            <input type="text" class="form-control" id="timeline"
-                   th:value="${project != null ? project.getTimeline() : ''}" name="timeline">
-        </div>
-
-        <div>
-            <label for="mytextarea">Other Details :</label>
-            <textarea name="ProjectDescription" id="mytextarea"
-             th:value="${project != null ? project.getProjectDescription() : ''}" ></textarea>
-        </div>
-
-
-        <button type="submit" class="btn btn-warning">Create Project</button>
-
-    </form>
-
+    </div>
     <script src="https://cdn.tiny.cloud/1/f2n0rpvq18n8phcrxf4rdtv6c3qe54nuygiaeo678mw4kko6/tinymce/7/tinymce.min.js"
             referrerpolicy="origin"></script>
 
@@ -71,7 +107,6 @@
           selector: '#mytextarea'
         });
     </script>
-
 
 
 </main>

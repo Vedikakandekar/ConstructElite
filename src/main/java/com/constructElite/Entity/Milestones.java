@@ -1,4 +1,5 @@
 package com.constructElite.Entity;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -8,26 +9,35 @@ import lombok.ToString;
 
 import java.time.LocalDateTime;
 
-
 @Setter
-@NoArgsConstructor
 @ToString
+@NoArgsConstructor
 @Entity
-public class ProjectDocuments {
+public class Milestones {
 
+
+    @Getter
     @Id
-    @Getter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int projectDocumentId;
+    private int milestoneId;
 
     @Getter
-    private String documentName;
+    private String milestoneName;
 
     @Getter
-    private String documentDescription;
+    private LocalDateTime completionDate;
 
     @Getter
-    private LocalDateTime addedAt;
+    private String status;
+
+    @Getter
+    private String description ;
+
+
+    @Getter
+    @OneToOne(mappedBy = "milestoneId", cascade = CascadeType.ALL)
+    private Payments paymentId;
+
 
     @ManyToOne(targetEntity = Project.class,fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
@@ -38,7 +48,4 @@ public class ProjectDocuments {
     public Project getProjectId() {
         return projectId;
     }
-
-
-
 }

@@ -8,7 +8,7 @@
 <body class="bg-dark">
 
 <section>
-    <div class="container">
+    <div class="container" >
         <div class="row mt-5">
             <div class="col-lg-4 m-auto">
 
@@ -17,7 +17,7 @@
                 </div>
                 <div th:if="${param.logout}" class="alert alert-success">
                     You have been logged out
-                </div>	̥
+                </div>
                 <form id="login-form" th:action="@{/signIn-processing}" method="post">
                     <!-- Email input -->
                     <div class="form-outline mb-4">

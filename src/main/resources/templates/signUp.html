@@ -1,4 +1,3 @@
-
 <html xmlns:th="http://www.w3.org/1999/xhtml" lang="en"
       th:replace=(~{base::layout(~{::section})})>
 <head>
@@ -8,16 +7,18 @@
 <body class="bg-dark">
 
 <section>
-    <div class="container">
+    <div class="container" style="height: auto; width: auto;">
         <div class="row mt-5">
             <div class="col-lg-4 m-auto">
 
-                <div th:if="${session.message}" th:classappend="${session.message.getType()}" class="alert alert-primary" role="alert">
-                    <p class="text-center" th:text="${session.message.getContent()}"> </p>
+                <div th:if="${session.message}" th:classappend="${session.message.getType()}"
+                     class="alert alert-primary" role="alert">
+                    <p class="text-center" th:text="${session.message.getContent()}"></p>
                     <th:block th:text="${@sessionHelper.removeMessageFromSession()}"></th:block>
-                </div>̥
-                <form class="row g-3" th:action="@{/registerUser}" method="POST"
-                      th:object="${user}">
+                </div>
+
+                <form novalidate class="row g-3" th:action="@{/registerUser}" method="POST"
+                      th:object="${user}" enctype="multipart/form-data">
 
                     <!--        UserType-->
 
@@ -34,27 +35,39 @@
                     <!-- Name-->
 
                     <div class="col-12">
-                        <label for="name" class="form-label">Name</label> <input required
-                                                                                 type="text" name="name" class="form-control" id="name"
-                                                                                 placeholder="as per adhar card" th:value="${user.getName()}">
+                        <label for="name" class="form-label">Name</label>
+                        <input required type="text" name="name" class="form-control "
+                               th:classappend="${#fields.hasErrors('name') ? 'is-invalid' : ''}"
+                               id="name" placeholder="as per adhar card" th:value="${user.getName()}">
+                        <div class="invalid-feedback" th:each="e:${#fields.errors('name')}" th:text="${e}">
+                        </div>
                     </div>
 
                     <!--        Mobile  &  Email -->
 
 
                     <div class="col-12">
-                        <label for="mob" class="form-label">Mobile No</label> <input
-                            required type="text" class="form-control" id="mob"
-                            name="phone" placeholder="Mobile Number"
-                            th:value="${user.getPhone()}">
+                        <label for="mob" class="form-label">Mobile No</label>
+                        <input
+                                required type="text" class="form-control "
+                                th:classappend="${#fields.hasErrors('phone') ? 'is-invalid' : ''}" id="mob"
+                                name="phone" placeholder="Mobile Number"
+                                th:value="${user.getPhone()}">
+                        <div class="invalid-feedback" th:each="e:${#fields.errors('phone')}" th:text="${e}">
+
+                        </div>
                     </div>
 
 
                     <div class="col-12">
                         <label for="email" class="form-label">Email</label> <input
-                            required type="text" class="form-control" id="email"
+                            required type="text" class="form-control "
+                            th:classappend="${#fields.hasErrors('email') ? 'is-invalid' : ''}" id="email"
                             name="email" placeholder="Email"
                             th:value="${user.getEmail()}">
+                        <div class="invalid-feedback" th:each="e:${#fields.errors('email')}" th:text="${e}">
+                            Enter Valid Email
+                        </div>
                     </div>
 
 
@@ -63,27 +76,42 @@
 
                     <div class="col-12">
                         <label for="addr" class="form-label">Address</label> <input
-                            type="text" required class="form-control" id="addr"
+                            type="text" required class="form-control "
+                            th:classappend="${#fields.hasErrors('address') ? 'is-invalid' : ''}" id="addr"
                             name="address" placeholder="1234 Main St"
                             th:value="${user.getAddress()}">
+                        <div class="invalid-feedback" th:each="e:${#fields.errors('address')}" th:text="${e}">
+                            Enter Valid Address
+                        </div>
                     </div>
 
                     <!--        Adhar  & Pan card Documents -->
                     <div class="col-12">
-                        <label for="adharDoc" class="form-label">Adhar Card</label> <input
-                            class="form-control form-control-sm" id="adharDoc" type="file">
+                        <label for="adharDoc" class="form-label">Adhar Card</label>
+                        <input class="form-control-sm form-control is-invalid" required id="adharDoc" type="file"
+                               name="adhar">
+                        <div class="invalid-feedback">
+                            Adhar Card is required
+                        </div>
                     </div>
 
                     <div class="col-12">
                         <label for="panDoc" class="form-label">Pan Card</label> <input
-                            class="form-control form-control-sm" id="panDoc" type="file">
+                            class="form-control form-control-sm is-invalid" required id="panDoc" type="file" name="pan">
+                        <div class="invalid-feedback">
+                            Pan Card is required
+                        </div>
                     </div>
 
 
                     <div class="col-md-6">
                         <label for="password" class="form-label">Password</label> <input
-                            type="password" class="form-control" id="password"
+                            type="password" class="form-control "
+                            th:classappend="${#fields.hasErrors('password') ? 'is-invalid' : ''}" id="password"
                             name="password">
+                        <div class="invalid-feedback" th:each="e:${#fields.errors('password')}" th:text="${e}">
+                            Enter valid Password
+                        </div>
                     </div>
 
                     <div class="col-12">
