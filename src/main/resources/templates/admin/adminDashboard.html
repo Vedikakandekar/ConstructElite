@@ -31,14 +31,14 @@
 
                 <!--                    block-client button-->
 
-                <td th:if="${clients}">
-                    <a class="btn btn-outline-danger btn-sm"
-                       data-bs-toggle="modal"
-                       th:attr="data-bs-target=${'#blockClient-' + user.UserId}"
-                       role="button">Block</a>
+<!--                <td th:if="${clients}">-->
+<!--                    <a class="btn btn-outline-danger btn-sm"-->
+<!--                       data-bs-toggle="modal"-->
+<!--                       th:attr="data-bs-target=${'#blockClient-' + user.UserId}"-->
+<!--                       role="button">Block</a>-->
 
 
-                </td>
+<!--                </td>-->
 
                 <!--                    Approve-SP button                         -->
 
@@ -59,15 +59,15 @@
                 </td>
 
                 <!--Block-SP button-->
-               <td th:if="${user.isApproved == true && !clients }">
+<!--               <td th:if="${user.isApproved == true && !clients }">-->
 
-                    <a class="btn btn-outline-danger btn-sm"
-                       data-bs-toggle="modal"
-                       th:attr="data-bs-target=${'#blockSp-' + user.UserId}"
-                       role="button">Block</a>
+<!--                    <a class="btn btn-outline-danger btn-sm"-->
+<!--                       data-bs-toggle="modal"-->
+<!--                       th:attr="data-bs-target=${'#blockSp-' + user.UserId}"-->
+<!--                       role="button">Block</a>-->
 
 
-                </td>
+<!--                </td>-->
 
 
                 <!--Approve-SP button-->

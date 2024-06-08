@@ -26,6 +26,11 @@ public class ProjectDocuments {
     @Getter
     private String documentDescription;
 
+    @Lob
+    @Getter
+    @Column(columnDefinition = "LONGBLOB")
+    private byte[] documentData;
+
     @Getter
     private LocalDateTime addedAt;
 
@@ -34,7 +39,7 @@ public class ProjectDocuments {
     private Project projectId;
 
 
-//    @JsonBackReference
+   @JsonBackReference
     public Project getProjectId() {
         return projectId;
     }

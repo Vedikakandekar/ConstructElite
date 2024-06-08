@@ -40,7 +40,7 @@
                         > Not Uploaded
                         </button>
                     </td>
-                    <td th:unless="${req.fulfilledAt == null}">
+                    <td th:if="${req.fulfilledAt != null AND req.getName() != 'SignContract'}">
                         <a th:href="@{/client/downloadReqDoc/{requestId}(requestId=${req.requestId})}">
                             <button type="button" id="downloadBtn" class="btn btn-outline-info btn-sm"
                                     th:text="'Download ' + ${req.getName()}"> Download
@@ -69,9 +69,28 @@
 
                     </td>
 
+                    <td th:if="${req.fulfilledAt != null AND req.getName() == 'SignContract' AND req.getRequestedDoc() == null}">
+
+                        <button type="button" id="UploadDigitalContractBtn" class="btn btn-outline-success btn-sm"
+                                data-bs-toggle="modal"
+                                th:attr="data-bs-target=${'#UploadDigitalContract-' + req.requestId}">
+                            Digital Contract is sent by Sp, Upload Here !!
+                        </button>
+                    </td>
+
+                    <td th:if="${req.fulfilledAt != null AND req.getName() == 'SignContract' AND req.getRequestedDoc() != null}">
+
+                        <button type="button" id="ContractUploadedBtn" class="btn btn-outline-info btn-sm">
+                            Digital Contract Uploaded !!
+                        </button>
+                    </td>
+
+
                 </tr>
                 </tbody>
             </table>
+
+
             <div class="modal fade"
                  th:each="req:${requestsList}" th:id="'AcceptDoc-' + ${req.requestId}"
                  data-bs-backdrop="static" data-bs-keyboard="false"
@@ -86,19 +105,16 @@
                         </div>
                         <div class="modal-body" >
                             <span th:if="${req.getName() == 'Quotation'}">Request for Contract</span>
-                            <span th:text="${req.getRequestId()}"></span>
-                            <span th:if="${req.getName() == 'Contract'}">Sign Contract</span>
-                            <form th:id="'acceptQuotReqContractForm-' + ${req.requestId}"
-                                  th:action="@{/client/AcceptQuotationRequestContract}" method="post">
-                                <!--                                            <input name="name" th:value="Contract" type="hidden" class="form-control-plaintext"/>-->
-                                <!--                                            <input name="documentName" type="hidden" th:value="ContractDocument"/>-->
-                                <!--                                            <input type="hidden" name="status">-->
-                                <!--                                            <input type="hidden" name="byClientId" th:value="${req.getByClientId().UserId}"/>-->
-                                <!--                                            <input type="hidden" name="toSpId" th:value="${req.getToSpId().UserId}"/>-->
-                                <!--                                            <input type="hidden" name="projectId" th:value="${req.getProjectId().projectId}"/>-->
-                                <input type="hidden" name="QuotationRequestId"
-                                       th:value="${req.getRequestId()}"/>
 
+                            <span th:if="${req.getName() == 'Contract'}"> It will be a Project Agreement Outline ,That would provide a high-level preview or
+                                summary of what the actual legal and digital contract will entail.</span>
+
+                            <form th:id="'acceptQuotReqContractForm-' + ${req.requestId}" th:action="@{/client/AcceptQuotationRequestContract}" method="post">
+                                <input type="hidden" name="QuotationRequestId" th:value="${req.getRequestId()}"/>
+                            </form>
+
+                            <form th:id="'sendContractOverEmailForm-' + ${req.requestId}" th:action="@{/client/acceptContractAndRequestToSendDigitalContract}" method="post">
+                                <input type="hidden" name="QuotationRequestId" th:value="${req.getRequestId()}"/>
                             </form>
 
 
@@ -108,12 +124,13 @@
                             </button>
 
                             <button th:if="${req.getName() == 'Quotation'}" th:form="'acceptQuotReqContractForm-' + ${req.requestId}"
-                                    type="submit" class="btn btn-primary">Request for Contract
+                                    type="submit" class="btn btn-primary">Request for Contract Blueprint
                             </button>
 
-                            <a th:if="${req.getName() == 'Contract'}" th:href="@{/client/uploadContract}">
-                                <button type="submit" class="btn btn-primary">Sign Contract</button>
-                            </a>
+                            <button th:if="${req.getName() == 'Contract'}" type="submit"
+                                    th:form="'sendContractOverEmailForm-' + ${req.requestId}"
+                                    class="btn btn-primary">Ask SP to send Legal Contract Over Email</button>
+
                             <!--                                    <button href="#" type="button" class="btn btn-primary">Block Client</button>-->
                         </div>
                     </div>
@@ -167,6 +184,55 @@
                     </div>
                 </div>
             </div>
+
+            <div class="modal fade"
+                 th:each="req:${requestsList}" th:id="'UploadDigitalContract-' + ${req.requestId}"
+               data-bs-backdrop="static" data-bs-keyboard="false"
+                 tabindex="-1" aria-labelledby="staticBackdropLabel2" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel2">Profile </h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="mb-3 row">
+                                <span>Upload Signed Contract sent by SP through Email</span>
+
+                                <span>If uploaded digital contract is valid then only SP will add milestones described in Quotation/Contract !! </span>
+
+                                <br><br><br>
+                                <form
+                                        th:id="'UploadDigitalContract-' + ${req.requestId}"
+                                      enctype="multipart/form-data" method="post" th:action="@{/client/UploadDigitalContract}">
+
+                                    <div class="col-12">
+                                        <label for="file1" class="form-label">Digital Contract : </label>
+                                        <input
+                                                class="form-control form-control-sm" id="file1" type="file" name="contract">
+                                    </div>
+                                    <input type="hidden" name="requestId"
+                                           th:value="${req.getRequestId()}"/>
+                                    <br><br>
+                                    <button type="submit" class="btn btn-success">Submit</button>
+                                </form>
+                                <br><br><br>
+
+                            </div>
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </main>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

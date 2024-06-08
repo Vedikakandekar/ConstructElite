@@ -13,6 +13,91 @@
         <div class="bg-light border rounded-3 p-3">
             <h2 th:text="${title}"></h2>
 
+            <div class="mx-auto" style="width: 700px;">
+                <div class="mb-3 row">
+
+                    <form class="row g-3" th:object="${CurrentUser}" th:action="@{/sp/updateSpProfile}" id ="spProfile" method="POST">
+
+                        <div class="col-6">
+                        <label for="uid" class="form-label">User Id</label>
+
+                                <input type="text" name="UserId" readonly class="form-control-plaintext"
+                                       id="uid" th:value="${CurrentUser.getUserId()}">
+                        </div>
+
+                        <div class="col-6">
+
+                        <label for="email" class="form-label">Email </label>
+
+
+                                <input type="text" name="email" readonly class="form-control-plaintext"
+                                       id="email" th:value="${CurrentUser.getEmail()}">
+
+                        </div>
+
+
+
+
+                        <div class="col-6">
+                            <label for="phone" class="form-label">Mobile</label>
+
+
+                            <input type="text" name="phone" readonly  class="form-control-plaintext"
+                                   id="phone" th:value="${CurrentUser.getPhone()}">
+
+                        </div>
+
+                        <div class="col-6">
+                            <label for="role" class="form-label">Role</label>
+
+
+                            <input type="text" name="role" readonly class="form-control-plaintext"
+                                   id="role" th:value="${CurrentUser.getRole()}">
+
+                        </div>
+
+                        <div class="col-6">
+                            <label for="isApproved" class="form-label">ApprovedStatus</label>
+
+
+                            <input type="text" name="isApproved" readonly class="form-control-plaintext"
+                                   id="isApproved" th:value="${CurrentUser.isApproved} ">
+
+                        </div>
+
+
+                        <div class="col-6">
+                            <label for="name" class="form-label">Name </label>
+
+
+                            <input type="text" name="name" id="name"
+                                   th:value="${CurrentUser.getName()}">
+
+                        </div>
+
+                        <div class="col-6">
+                        <label for="addr" class="form-label">Address</label>
+
+
+                                <input type="text" name="address"
+                                       id="addr" th:value="${CurrentUser.getAddress()}">
+
+                        </div>
+
+
+
+
+                        <input type="hidden" name="password" readonly
+                               class="form-control-plaintext"
+                               th:value="${CurrentUser.password}">
+
+<!--                        <button type="submit" class="btn btn-success" form="spProfile">Update-->
+                        </button>
+
+                    </form>
+                </div>
+            </div>
+
             </div>
     </main>
 </section>

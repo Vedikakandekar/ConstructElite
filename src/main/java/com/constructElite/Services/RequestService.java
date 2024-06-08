@@ -25,7 +25,7 @@ public class RequestService {
 
     public List<Requests> getRequestBySpId(User sp)
     {
-        return requestRepo.findRequestsBySpIdAndEmptyDocument(sp);
+        return requestRepo.findNonFulfilledRequestsBySpId(sp);
     }
 
     public Requests findByRequestId(int requestId)
@@ -60,5 +60,10 @@ public class RequestService {
     public byte[] findRequestedDocumentByRequestId(int requestId)
     {
        return requestRepo.findRequestedDocumentByRequestId(requestId);
+    }
+
+    public List<Requests> getRequestsWhereProjectsWithContractStatus(Project project,String name,Boolean status)
+    {
+        return requestRepo.findByProjectWithAcceptedContract(project,name,status);
     }
 }

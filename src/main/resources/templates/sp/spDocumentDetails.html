@@ -23,8 +23,8 @@
 
                         <button type="button" id="approvalBtn" class="btn btn-outline-success"
                                 data-bs-toggle="modal" data-bs-target="#approval"
-                                th:if="${CurrentUser.isApproved == null and licenseDoc == true }">
-                            Upload Required Documents To get Approved
+                                th:if="${licenseDoc == true }">
+                            Upload License
                         </button>
                         </div>
                 </div>

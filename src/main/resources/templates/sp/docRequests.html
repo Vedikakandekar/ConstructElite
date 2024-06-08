@@ -42,14 +42,47 @@
                            th:attr="data-bs-target=${'#viewDetails-' + req.requestId}"
                            role="button">project Details</a>
                     </td>
-                    <!--            Show More Project Details  modal-->
 
-                    <td>
-                        <button type="button" id="uploadBtn" class="btn btn-outline-info btn-sm"
-                                data-bs-toggle="modal"
-                                th:attr="data-bs-target=${'#upload-' + req.requestId}"
-                                th:text="'Upload ' + ${req.getName()}"> Upload
+
+                    <td th:if="${req.getName() == 'SignContract' AND req.getFulfilledAt()== null}" >
+                        <a th:href="@{/sp/legalContractSentBySp/{requestId} (requestId=${req.getRequestId()})}" >
+                        <button type="button" class="btn btn-outline-info btn-sm"
+                                th:text="'Sent Contract Through Email'" > Sent Contract Through Email </button>
+                        </a>
+                    </td>
+
+
+                    <td th:if="${req.getName() != 'SignContract' AND req.getName() != 'ValidateContract' AND req.getFulfilledAt()== null}" >
+                        <button type="button" id="uploadBtn" class="btn btn-outline-info btn-sm" data-bs-toggle="modal"
+                                th:attr="data-bs-target=${'#upload-' + req.requestId}" th:text="'Upload ' + ${req.getName()}"> Upload
                         </button>
+                    </td>
+
+                    <td th:if="${req.fulfilledAt == null AND req.getName() == 'ValidateContract'}">
+                        <a th:href="@{/sp/downloadContract/{requestId} (requestId=${req.requestId})}">
+                            <button type="button" id="downloadBtn" class="btn btn-outline-info btn-sm"
+                                    > Download Contract
+                            </button>
+                        </a>
+
+                        <!-- Check if req.status is true -->
+                        <button class="btn btn-outline-success btn-sm" th:if="${req.status}">Accepted</button>
+
+                        <button class="btn btn-outline-danger btn-sm" th:if="${req.status==false}">Rejected</button>
+
+
+                        <!-- Check if req.status is null -->
+                        <a th:if="${req.status == null}"
+                           class="btn btn-outline-warning btn-sm"
+                           th:href="@{/sp/AcceptValidateContractRequest/{requestId} (requestId=${req.requestId})}"
+                           role="button" >Accept</a>
+
+                        <a th:if="${req.status == null}"
+                           class="btn btn-outline-danger btn-sm"
+                           th:href="@{/sp/rejectValidateContractRequest/{requestId} (requestId=${req.requestId})}"
+                           role="button">Reject</a>
+
+
                     </td>
                 </tr>
                 </tbody>

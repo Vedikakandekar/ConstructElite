@@ -2,6 +2,7 @@ package com.constructElite.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,16 +23,24 @@ public class Milestones {
     private int milestoneId;
 
     @Getter
+    @NotBlank(message = "milestoneName Should NOT  be Empty !!")
     private String milestoneName;
 
     @Getter
-    private LocalDateTime completionDate;
+    @NotBlank(message = "completionDate Should NOT  be Empty !!")
+    private String completionDate;
 
     @Getter
+    @NotBlank(message = "status Should NOT  be Empty !!")
     private String status;
 
     @Getter
-    private String description ;
+    @NotBlank(message = "description Should NOT  be Empty !!")
+    private String description;
+
+    @Getter
+    @NotBlank(message = " Amount  Should NOT  be Empty !!")
+    private String amountToBePaid;
 
 
     @Getter

@@ -35,6 +35,8 @@ public class AdminController {
     {
         ModelAndView m = setupAdminDashboardModel();
         List<User> userList = userService.searchAllUsers(searchTerm);
+        for(User u : userList)
+            System.out.println(u);
         m.addObject("title", "Search Results");
         m.addObject("userList", userList);
         return m;

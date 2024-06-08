@@ -1,12 +1,7 @@
 package com.constructElite.controller;
 
-import com.constructElite.Entity.Project;
-import com.constructElite.Entity.Requests;
-import com.constructElite.Entity.User;
-import com.constructElite.Entity.UserDocuments;
-import com.constructElite.Services.ProjectService;
-import com.constructElite.Services.RequestService;
-import com.constructElite.Services.UserService;
+import com.constructElite.Entity.*;
+import com.constructElite.Services.*;
 import com.constructElite.helper.UserMessage;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -18,11 +13,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+
 
 @Controller
 @RequestMapping("client/")
@@ -36,6 +33,12 @@ public class ClientController {
 
     @Autowired
     RequestService requestService;
+
+    @Autowired
+    ProjectDocumentsService pDocService;
+
+    @Autowired
+    ContractDetailsService contractService;
 
     private ModelAndView setupClientDashboardModel() {
         List<User> userList = userService.getAllSp();
@@ -86,17 +89,16 @@ public class ClientController {
     }
 
     @PostMapping("/add-new-project")
-    public String addNewProject(@Valid   @ModelAttribute("project") Project project,
+    public String addNewProject(@Valid @ModelAttribute("project") Project project,
                                 BindingResult result, Model model, HttpSession session) {
         try {
-        User currUser = userService.getCurrentLoggedInUser();
+            User currUser = userService.getCurrentLoggedInUser();
 
-        model.addAttribute("CurrentUser", currUser);
-        if(result.hasErrors())
-        {
-            model.addAttribute("project",project);
-            return     "client/createNewProject";
-        }
+            model.addAttribute("CurrentUser", currUser);
+            if (result.hasErrors()) {
+                model.addAttribute("project", project);
+                return "client/createNewProject";
+            }
 
             Project already = projectService.getProjectByName(project.getName());
             if (already != null) {
@@ -136,7 +138,7 @@ public class ClientController {
         ModelAndView m = new ModelAndView();
         m.addObject("CurrentUser", userService.getCurrentLoggedInUser());
         m.addObject("title", "Create New Project");
-        m.addObject("project",new Project());
+        m.addObject("project", new Project());
         m.setViewName("client/createNewProject");
         return m;
     }
@@ -155,10 +157,10 @@ public class ClientController {
     }
 
     @PostMapping("/askQuotation/{sp_id}")
-    public ModelAndView askQuotation(@ModelAttribute("request") Requests requests,@PathVariable("sp_id") int sp_id) {
+    public ModelAndView askQuotation(@ModelAttribute("request") Requests requests, @PathVariable("sp_id") int sp_id) {
         if (requests.getProjectId() == null) {
             ModelAndView model = new ModelAndView();
-            User currUser=userService.getCurrentLoggedInUser();
+            User currUser = userService.getCurrentLoggedInUser();
             model.addObject("errorMessageQuot", "Project name is required.");
             model.addObject("CurrentUser", currUser);
             List<Project> projectList = projectService.getProjectsByClientId(currUser.getUserId());
@@ -214,13 +216,8 @@ public class ClientController {
 
     @PostMapping("/AcceptQuotationRequestContract")
     public ModelAndView AcceptQuotationRequestContract(@RequestParam("QuotationRequestId") int QuotationRequestId) {
-//        System.out.println("            HELLO               ");
-//        System.out.println("           Helloooo            ");
-//
-//        System.out.println(QuotationRequestId);
         Requests prevQuotReq = requestService.findByRequestId(QuotationRequestId);
         if (prevQuotReq != null) {
-//            System.out.println(prevQuotReq.getRequestId()+"   \n"+prevQuotReq.getByClientId()+"    \n "+prevQuotReq.getRequestId()+"   \n"+prevQuotReq.getToSpId());
             prevQuotReq.setStatus(true);
             Requests prevReq = requestService.saveRequestToDb(prevQuotReq);
             if (prevReq.getRequestId() > 0) {
@@ -258,8 +255,7 @@ public class ClientController {
         Requests prevQuotReq = requestService.findByRequestId(QuotationRequestId);
 
         if (prevQuotReq != null) {
-//            System.out.println(prevQuotReq.getRequestId()+"   \n"+prevQuotReq.getByClientId()+"    \n "+prevQuotReq.getRequestId()+"   \n"+prevQuotReq.getToSpId());
-            prevQuotReq.setRejectionReason(rejectionReason);
+         prevQuotReq.setRejectionReason(rejectionReason);
             prevQuotReq.setStatus(false);
             Requests prevReq = requestService.saveRequestToDb(prevQuotReq);
             if (prevReq.getRequestId() > 0) {
@@ -278,8 +274,7 @@ public class ClientController {
 
 
     @PostMapping("/updateClientProfile")
-    public ModelAndView updateClientDetails(@ModelAttribute("CurrentUser") User user)
-    {
+    public ModelAndView updateClientDetails(@ModelAttribute("CurrentUser") User user) {
         ModelAndView m = new ModelAndView();
 
         user.setIsApproved(true);
@@ -288,7 +283,121 @@ public class ClientController {
         m.addObject("title", "Service Providers");
         m.setViewName("/client/clientDashboard");
         m.addObject("userList", userList);
-        m.addObject("CurrentUser",updatedUser);
+        m.addObject("CurrentUser", updatedUser);
         return m;
     }
+
+    @PostMapping("/acceptContractAndRequestToSendDigitalContract")
+    public ModelAndView acceptContractAndRequestToSendDigitalContract(@RequestParam("QuotationRequestId") int QuotationRequestId) {
+        Requests prevReq1 = requestService.findByRequestId(QuotationRequestId);
+        if (prevReq1 != null) {
+            prevReq1.setStatus(true);
+            Requests prevReq = requestService.saveRequestToDb(prevReq1);
+
+            if (prevReq.getRequestId() > 0) {
+                Requests requests = new Requests();
+                requests.setName("SignContract");
+                requests.setDocumentName("SignContract");
+                requests.setStatus(null);
+                requests.setCreatedAt(LocalDateTime.now());
+                requests.setByClientId(prevReq.getByClientId());
+                requests.setToSpId(prevReq.getToSpId());
+                requests.setProjectId(prevReq.getProjectId());
+                Requests result = requestService.saveRequestToDb(requests);
+                if (result.getRequestId() > 0) {
+                    ModelAndView m = setupClientDashboardModel();
+                    return m;
+                }
+                ModelAndView m = new ModelAndView();
+                m.setViewName("/error");
+                return m;
+            }
+            ModelAndView m = new ModelAndView();
+            m.setViewName("/error");
+            return m;
+
+
+        }
+
+
+//        }
+
+
+        ModelAndView m = new ModelAndView();
+        m.setViewName("/error");
+        return m;
+
+    }
+
+
+    @PostMapping("/UploadDigitalContract")
+    public ModelAndView UploadDigitalContract(@RequestParam("contract") MultipartFile contract,
+                                              @RequestParam("requestId") int requestId) throws IOException {
+        Requests prevReq = requestService.findByRequestId(requestId);
+        if (prevReq != null) {
+
+            List<Requests> acceptedContractRequestList =
+                    requestService.getRequestsWhereProjectsWithContractStatus(
+                            prevReq.getProjectId(),
+                            "SignContract", true);
+
+            if (acceptedContractRequestList.isEmpty()) {
+                prevReq.setRequestedDoc(contract.getBytes());
+                prevReq.setFulfilledAt(LocalDateTime.now());
+                Requests prevReqSaved = requestService.saveRequestToDb(prevReq);
+                if (prevReqSaved.getRequestId() > 0) {
+
+
+                    Requests requests = new Requests();
+                    requests.setStatus(null);
+                    requests.setName("ValidateContract");
+                    requests.setDocumentName("NonValidatedContract");
+                    requests.setByClientId(prevReqSaved.getByClientId());
+                    requests.setToSpId(prevReqSaved.getToSpId());
+                    requests.setProjectId(prevReqSaved.getProjectId());
+                    requests.setCreatedAt(LocalDateTime.now());
+                    requests.getProjectId().setSpOnProject(requests.getToSpId());
+                    requests.setRequestedDoc(prevReqSaved.getRequestedDoc());
+                    requestService.saveRequestToDb(requests);
+
+
+                        ModelAndView m = setupClientDashboardModel();
+                        return m;
+                }
+
+            } else {
+                ModelAndView m = new ModelAndView();
+                m.addObject("errorMessage", "You've Already Uploaded contract for Selected Project !!");
+                m.setViewName("/error");
+                return m;
+            }
+        }
+
+            ModelAndView m = new ModelAndView();
+        m.addObject("errorMessage", "Something went wrong ...try again later");
+            m.setViewName("/error");
+            return m;
+
+    }
+
+
+    private ProjectDocuments saveProjectDoc(MultipartFile file, ProjectDocuments pdoc) {
+
+        try {
+            pdoc.setAddedAt(LocalDateTime.now());
+            pdoc.setDocumentData(file.getBytes());
+            ProjectDocuments pDocSaved = pDocService.saveProjectDocTODb(pdoc);
+            if (pDocSaved.getProjectDocumentId() > 0) {
+                return pDocSaved;
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return new ProjectDocuments();
+    }
+
+
+
+
+
 }

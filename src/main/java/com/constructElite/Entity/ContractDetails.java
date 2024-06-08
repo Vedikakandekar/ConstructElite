@@ -21,7 +21,7 @@ public class ContractDetails {
 
     private LocalDateTime signedAt;
 
-    private int totalAmount;
+    private Boolean validated;
 
     private String status;
 
@@ -29,7 +29,4 @@ public class ContractDetails {
     @JoinColumn(name = "request_id")
     private Requests requestId;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "projectId")
-    private Project projectId;
 }

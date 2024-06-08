@@ -22,4 +22,7 @@ public interface ProjectRepository extends JpaRepository<Project,Integer> {
     @Query("SELECT p FROM Project p WHERE p.clientOnProject.UserId =?1")
     List<Project> findByClientOnProjectUserId(int clientId);
 
+    @Query("SELECT p FROM Project p WHERE p.spOnProject.UserId =?1")
+    List<Project> findBySpOnProjectUserId(int spId);
+
 }

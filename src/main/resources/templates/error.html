@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Error Page</title>
+    <!-- Add your CSS and other meta tags -->
+</head>
+<body>
+<h1>Error Page</h1>
+<!-- Your error message -->
+<p th:text="${errorMessage}"></p>
+
+<!-- JavaScript to show popup based on error message -->
+<script th:if="${errorMessage != null}">
+    window.onload = function() {
+        alert([[${errorMessage}]]);
+    };
+</script>
+</body>
+</html>
